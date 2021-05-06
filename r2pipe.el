@@ -4,7 +4,7 @@
 ;; Maintainer: Tassos Manganaris
 ;; Version: 0.1
 ;; Package-Requires: ()
-;; Homepage:
+;; Homepage: https://github.com/Tass0sm/r2pipe.el
 ;; Keywords: radare, radare2, reverse engineering
 
 
@@ -28,21 +28,19 @@
 
 ;; r2pipe for emacs
 
-;; start with making a radare2 subprocess under emacs.
-
-;; write a command to that process by sending a newline terminated string to
-;; it's stdin and flushing.
-;; f : String -> Process -> IO ()
-
-;; read the result by collecting the output from the process's stdout.
-;; f : Process -> IO (String)
-
 ;;; Code:
 
-(defvar r2-bin-path "/home/tassos/.guix-profile/bin/r2")
-(defvar latest-output nil)
+(defgroup r2pipe nil
+  "Run and interact with radare2 under Emacs."
+  :prefix "r2pipe-"
+  :group 'tools)
 
-(defun my-process-filter (process output)
+(defcustom r2-bin-path "/usr/bin/r2"
+  "The path to the radare2 program.")
+
+(setq latest-output nil)
+
+(defun r2--copy-output-filter (process output)
   (setq latest-output output))
 
 (defun r2open (file)
@@ -50,17 +48,15 @@
                 :command (list r2-bin-path "-q0" file)
                 :connection-type 'pipe
                 :filter 'my-process-filter
-                :stderr (get-buffer-create "r2-stderr")))
+                :stderr (get-buffer-create " r2-stderr")))
 
 (defun r2write (process cmd)
   (process-send-string process (concat cmd "\n")))
 
-(defun r2read ()
-  latest-output)
-
 (defun r2cmd (process cmd)
   (r2write process cmd)
-  (r2read))
+  (sit-for 0.5)
+  latest-output)
 
 (provide 'r2pipe)
 

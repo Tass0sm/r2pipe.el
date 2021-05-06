@@ -1,0 +1,14 @@
+#+title: r2pipe.el
+
+A way to use radare2 from emacs lisp. Eventually, this should be used in a
+client like magit, but with radare2 instead of git.
+
+* Example Usage:
+
+  This opens a radare2 process for the file at =/usr/bin/ls= and prints the
+  first 10 bytes in hexadecimal.
+
+  #+begin_src emacs-lisp
+    (setq r2pipe (r2open "/usr/bin/ls"))
+    (r2cmd r2pipe "x 10")
+  #+end_src
