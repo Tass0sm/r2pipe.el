@@ -1,5 +1,7 @@
 #+title: r2pipe.el
 
+Archived. This already exists here: https://github.com/jjdredd/r2pipe.el/blob/master/r2pipe.el
+
 A way to use radare2 from emacs lisp. Eventually, this should be used in a
 client like magit, but with radare2 instead of git.
 
